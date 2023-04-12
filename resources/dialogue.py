@@ -49,6 +49,7 @@ class MacroHome(Macro):
             ranking = data[0]['ranking']
             year = data[0]['year']
             vars['home_team_ranking'] = ranking
+            # [team name] ranked [rank] in [2021]
             print(team_name + " is ranked #" + str(ranking) + " in " + str(year))
         else:
             print('That team is not part of EPL')
