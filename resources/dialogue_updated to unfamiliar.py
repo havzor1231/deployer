@@ -109,21 +109,23 @@ unfamiliar={
                                     'That is such a quick goal! Given that the average first goal for soccer game is after 30 minutes on average!`':{
                                         '#GET_INTERESTED':{
                                             '$IF_Interested':{
-                                                 '`Manchester United’s squad is one of the biggest in the Premier League and it’s filled up with quality players in every position. They are actually gonna have a game with Tottenham Hotspur soon. '
-                                                 'They have long been rivals with with each other and Hotspur currently ranked one below Manchester United!
-                                                 'Do you bother bet on their results?':{
+                                                 '`Manchester United’s squad is one of the biggest in the Premier League and it’s filled up with quality players in every position. They are actually gonna have a game with Tottenham Hotspur soon.
+                                                 'They have long been rivals with each other and Hotspur currently ranks one below Manchester United!
+                                                 'Do you bother bet on their results?`':{
                                                      '/*':{
                                                          '#UNX, I would say 2-0. It somehow made me recall their game last year in October. They had 0-0 at half time.`':'end'
-                                                     }
-                                                 }
-                                            }
+                                                     },
+                                                 },
+                                            },
+                                            '$IF_NotInterested':'fun_fact'
+                                        }
 
                                     }
                                     }
-
-
+                                      '$IF_NotInterested':'fun_fact'
                            }
                         }
+                    '$IF_NotInterested'
                     }
                 }
             }
