@@ -138,7 +138,14 @@ recommendation={
     '#GATE `Do you want to know more about some players? Marcus Rashford is my favorite from Manchester United. Well, if you\'re looking for a football player who can run faster than a cheetah on Red Bull, score goals like it\'s his job (oh wait,'
     'it actually is his job), and make the opposing team\'s defense look like a bunch of lost toddlers, then Marcus Rashford is your man. In fact, if football was a video game, Marcus would be the cheat code that everyone wants to unlock. `':{
         '#GET_Interested':{
-            '$IF_Interested'
+            '$IF_Interested':{
+                '`Rashford appeared 233 times in this season and had 74 goals. He is absolutely one of the heated players. Do you want to look at some of his game stats?`:{'
+                '[yes]':{
+                    '`stats` Speaking of this, I am a big fan of Manchester United as well. Do you think you would like Manchester United? It is one of the ':{
+
+                    }
+                }
+            }
         }
     }
 }
