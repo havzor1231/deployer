@@ -92,8 +92,7 @@ familiar = {
 unfamiliar={
     'state':'unfamiliar',
     '`Manchester United is part of EPL.  The Premier League was founded in 1992, '
-    'replacing the First Division as the top tier of English football. Some of the most '
-    'famous players you might have heard of are _, _, _. Does this sound interesting to you?`':{
+    'replacing the First Division as the top tier of English football. Does this sound interesting to you?`':{
         '[yes]':{
             '`Great! Manchester United is one of the most successful teams in the English Premier League. The famous player'
             'Cristiano Ronaldo was once a member of Manchester United!`':{
@@ -121,17 +120,27 @@ unfamiliar={
                                         }
 
                                     }
-                                    }
+                                    },
                                       '$IF_NotInterested':'fun_fact'
                            }
-                        }
-                    '$IF_NotInterested'
+                        },
+                    '$IF_NotInterested':'fun_fact'
                     }
                 }
             }
-        }
+        '`[no]`':'recommendation'
+
     }
 
+}
+
+recommendation={
+    '#GATE `Do you want to know more about some players? Marcus Rashford is my favorite from Manchester United. Well, if you\'re looking for a football player who can run faster than a cheetah on Red Bull, score goals like it\'s his job (oh wait,'
+    'it actually is his job), and make the opposing team\'s defense look like a bunch of lost toddlers, then Marcus Rashford is your man. In fact, if football was a video game, Marcus would be the cheat code that everyone wants to unlock. `':{
+        '#GET_Interested':{
+            '$IF_Interested'
+        }
+    }
 }
 macros = {
         'GET_HOME_TEAM': MacroHome()
