@@ -149,8 +149,8 @@ rashford_rec={
             '$IF_Interested':{
                 '`Rashford appeared 233 times in this season and had 74 goals. He is absolutely one of the heated players. Do you want to look at some of his game stats?`:{'
                 '[yes]':{
-                    '`stats` Speaking of this, I am a big fan of Manchester United as well. Do you think you would like Manchester United? Manchester United is a team with a rich history and a tradition of excellence.'
-                    'If you want to support a team that has consistently been among the best in the world, then Manchester United is a great choice.':{
+                    '`stats Speaking of this, I am a big fan of Manchester United as well. Do you think you would like Manchester United? Manchester United is a team with a rich history and a tradition of excellence.'
+                    'If you want to support a team that has consistently been among the best in the world, then Manchester United is a great choice.`':{
                         '[yes]':{
                             '`cool`':'end'
                         },
@@ -159,11 +159,31 @@ rashford_rec={
                 },
                 '[no]':'player_recommendation'
             }
+            '$IF_NotInterested':'player_recommendation'
         }
     }
 }
 kane_rec={
-
+    'state':'kane_rec',
+    '`Despite his success on the field, Harry Kane remains humble and grounded.`':{
+         '#GET_Interested':{
+            '$IF_Interested':{
+                '`Harry Kane appeared 313 times in this season and had 206 goals. You can call him one of the most successful commissioned players. Do you want to know how he performed?`':{
+                '[yes]':{
+                    '`stats Tottenham Hotspur is viral these days! Some of their players made wonderful performance at the World Cup.'
+                    'I personally like this team a lot! Do you think you would like it?`':{
+                        '[yes]':{
+                            'cool':'end'
+                        },
+                        '[no]':'team_recommendation'
+                    }
+                },
+               '[no]':'player_recommendation'
+                }
+        },
+            '$IF_NotInterested':'player_recommendation'
+         }
+    }
 }
 macros = {
         'GET_HOME_TEAM': MacroHome()
@@ -174,6 +194,10 @@ macros = {
 df = DialogueFlow('start', end_state='end')
 df.load_transitions(transitions)
 df.load_transitions(familiar)
+df.load_transitions(unfamiliar)
+df.load_transitions(player_recommendation)
+df.load_transitions(rashford_rec)
+df.load_transitions(kane_recommendation)
 df.add_macros(macros)
 
 if __name__ == '__main__':
