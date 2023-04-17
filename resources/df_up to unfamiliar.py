@@ -128,26 +128,42 @@ unfamiliar={
                     }
                 }
             }
-        '`[no]`':'recommendation'
+        '`[no]`':'player_recommendation'
 
     }
 
 }
 
-recommendation={
+player_recommendation={
+    'state':'player_recommendation',
     '#GATE `Do you want to know more about some players? Marcus Rashford is my favorite from Manchester United. Well, if you\'re looking for a football player who can run faster than a cheetah on Red Bull, score goals like it\'s his job (oh wait,'
-    'it actually is his job), and make the opposing team\'s defense look like a bunch of lost toddlers, then Marcus Rashford is your man. In fact, if football was a video game, Marcus would be the cheat code that everyone wants to unlock. `':{
+    'it actually is his job), and make the opposing team\'s defense look like a bunch of lost toddlers, then Marcus Rashford is your man. `':'rashford_rec',
+    '#GATE `Do you want to know more about some players? Harry Kane is my favorite from Tottenham Hotspur. He is not just a goal-scoring machine, he\'s also a great team player.'
+    ' He has a knack for creating chances for his teammates and can change the course of a game with his passing and playmaking abilities.`':'kane_rec',
+}
+
+rashford_rec={
+    'state':'rashford_rec',
+    '`In fact, if football was a video game, Marcus would be the cheat code that everyone wants to unlock. `':{
         '#GET_Interested':{
             '$IF_Interested':{
                 '`Rashford appeared 233 times in this season and had 74 goals. He is absolutely one of the heated players. Do you want to look at some of his game stats?`:{'
                 '[yes]':{
-                    '`stats` Speaking of this, I am a big fan of Manchester United as well. Do you think you would like Manchester United? It is one of the ':{
-
+                    '`stats` Speaking of this, I am a big fan of Manchester United as well. Do you think you would like Manchester United? Manchester United is a team with a rich history and a tradition of excellence.'
+                    'If you want to support a team that has consistently been among the best in the world, then Manchester United is a great choice.':{
+                        '[yes]':{
+                            '`cool`':'end'
+                        },
+                        '[no]':'team_recommendation'
                     }
-                }
+                },
+                '[no]':'player_recommendation'
             }
         }
     }
+}
+kane_rec={
+
 }
 macros = {
         'GET_HOME_TEAM': MacroHome()
