@@ -185,6 +185,12 @@ kane_rec={
          }
     }
 }
+
+team_recommendation={
+    'state':'team_recommendation',
+    '`say teams`':'end'
+}
+
 macros = {
         'GET_HOME_TEAM': MacroHome()
     }
@@ -197,7 +203,8 @@ df.load_transitions(familiar)
 df.load_transitions(unfamiliar)
 df.load_transitions(player_recommendation)
 df.load_transitions(rashford_rec)
-df.load_transitions(kane_recommendation)
+df.load_transitions(kane_rec)
+df.load_transitions(team_recommendation)
 df.add_macros(macros)
 
 if __name__ == '__main__':
