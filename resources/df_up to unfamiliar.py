@@ -1,13 +1,19 @@
-import requests
+import random
 from enum import Enum
+from typing import Dict, Any
+
+import requests
 from emora_stdm import DialogueFlow
 from emora_stdm import Macro, Ngrams
 from typing import Dict, Any, List
-import openai
-from typing import Dict, Any, List
 import re
-import os
 
+import openai
+from emora_stdm import DialogueFlow
+import utils
+from utils import MacroGPTJSON, MacroNLG
+
+PATH_USER_INFO = 'resource/userinfo.json'
 
 team_dict = {
     'arsenal': 'Arsenal',
@@ -46,6 +52,8 @@ class MacroGetInterested(Macro):
         else:
             vars['INTERESTED'] = 'false'
             print('false')
+
+
 class MacroHome(Macro):
     def run(self, ngrams: Ngrams, vars: Dict[str, Any], args: List[Any]):
         user_input = input().lower()
@@ -110,24 +118,23 @@ unfamiliar={
         '[yes]':{
             '`Great! Manchester United is one of the most successful teams in the English Premier League. The famous player'
             'Cristiano Ronaldo was once a member of Manchester United!`':{
-                '#GET_INTERESTED':{
-                    '$IF_Interested `Manchester United can be one of my favorite team. Do you have any favorite team in EPL so far?`':{
-                        '#GET_HOME_TEAM':{
-                            '`Good for you! `$home_team_ranking`.`':'match_discussion'
+                '#SET_INTERESTED #GET_INTERESTED':{
+                    '#IF($INTERESTED=true) `Manchester United can be one of my favorite team. Do you have any favorite team in EPL so far?`':{
+                        '[yes]':{
+                            '`Good for you! `':'match_discussion'
                         },
                         'error':{
                         '`Oh that\'s fine. I watched Manchester United\'s recent game with Sevilla, another team in EPL. It was so intense! They got 2-2 eventually.`':{
-                                '#GET_INTERESTED':{
+                                '#SET_INTERESTED #GET_INTERESTED':{
                                     '#IF($INTERESTED=true) `I know! Sabitzer from Manchester United had the first goal 14 minutes after the game for his team! '
                                     'That is such a quick goal! Given that the average first goal for soccer game is after 30 minutes on average!`':{
-                                        '#GET_INTERESTED':{
-                                            '#IF($INTERESTED=true)':{
-                                                 '`Manchester United’s squad is one of the biggest in the Premier League and it’s filled up with quality players in every position. '
+                                        '#SET_INTERESTED #GET_INTERESTED':{
+                                            '#IF($INTERESTED=true)`Manchester United’s squad is one of the biggest in the Premier League and it’s filled up with quality players in every position. '
                                                   'They are actually gonna have a game with Tottenham Hotspur soon.'
                                                  'They have long been rivals with each other and Hotspur currently ranks one below Manchester United!'
                                                  'Do you bother betting on their results?`':{
-                                                     '/*':{
-                                                         '#UNX, I would say 2-0. It somehow made me recall their game last year in October. They had 0-0 at half time.`':'end'
+                                                     '#UNX':{
+                                                         '` I would say 2-0. It somehow made me recall their game last year in October. They had 0-0 at half time.`':'end'
                                                      },
                                                  },
                                             },
@@ -143,25 +150,26 @@ unfamiliar={
                     '#IF($INTERESTED=false)':'fun_fact'
                     }
                 }
-            }
+            },
         '`[no]`':'player_recommendation'
 
     }
 
-}
+
 
 player_recommendation={
     'state':'player_recommendation',
     '#GATE `Do you want to know more about some players? Marcus Rashford is my favorite from Manchester United. Well, if you\'re looking for a football player who can run faster than a cheetah on Red Bull, score goals like it\'s his job (oh wait,'
     'it actually is his job), and make the opposing team\'s defense look like a bunch of lost toddlers, then Marcus Rashford is your man. `':'rashford_rec',
-    '#GATE `Do you want to know more about some players? Harry Kane is my favorite from Tottenham Hotspur. He is not just a goal-scoring machine, he\'s also a great team player.'
+    '#GATE `Do you want to know more about some players? Harry Kane is my favorite from Tottenham Hotspur. He is not '
+    'just a goal-scoring machine, he\'s also a great team player.'
     ' He has a knack for creating chances for his teammates and can change the course of a game with his passing and playmaking abilities.`':'kane_rec',
 }
 
 rashford_rec={
     'state':'rashford_rec',
     '`In fact, if football was a video game, Marcus would be the cheat code that everyone wants to unlock. `':{
-        '#GET_Interested':{
+        '#SET_INTERESTED #GET_Interested':{
             '#IF($INTERESTED=true)':{
                 '`Rashford appeared 233 times in this season and had 74 goals. He is absolutely one of the heated players. Do you want to look at some of his game stats?`:{'
                 '[yes]':{
@@ -174,7 +182,7 @@ rashford_rec={
                     }
                 },
                 '[no]':'player_recommendation'
-            }
+            },
             '#IF($INTERESTED=false)':'player_recommendation'
         }
     }
@@ -229,4 +237,5 @@ df.load_transitions(team_recommendation)
 df.add_macros(macros)
 
 if __name__ == '__main__':
+    openai.api_key_path = utils.OPENAI_API_KEY_PATH
     df.run()
