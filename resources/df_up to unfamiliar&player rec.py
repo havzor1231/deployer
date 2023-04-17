@@ -116,10 +116,10 @@ unfamiliar={
     '`Manchester United is part of EPL.  The Premier League was founded in 1992, '
     'replacing the First Division as the top tier of English football. Does this sound interesting to you?`':{
         '[yes]':{
-            '`Great! Manchester United is one of the most successful teams in the English Premier League. The famous player'
+            '`Great! Let\'s start with one of the most successful teams in the EPL historically! Manchester United is one of the most successful teams in the English Premier League. The famous player '
             'Cristiano Ronaldo was once a member of Manchester United!`':{
                 '#SET_INTERESTED #GET_INTERESTED':{
-                    '#IF($INTERESTED=true) `Manchester United can be one of my favorite team. Do you have any favorite team in EPL so far?`':{
+                    '#IF($INTERESTED=true) `Manchester United can be one of your favorite teams. Do you have any favorite team in EPL so far?`':{
                         '[yes]':{
                             '`Good for you! `':'match_discussion'
                         },
@@ -164,12 +164,17 @@ player_recommendation={
     '#GATE `Do you want to know more about some players? Harry Kane is my favorite from Tottenham Hotspur. He is not '
     'just a goal-scoring machine, he\'s also a great team player.'
     ' He has a knack for creating chances for his teammates and can change the course of a game with his passing and playmaking abilities.`':'kane_rec',
+    '#GATE `Do you want to know more about some players? Kevin De Bruyne is my favorite Manchester City player. If you love players who can play any offensive role'
+    'and passes beautifully, you would love De Bruyne!`':'de_bruyne_rec',
+    '#GATE `Do you want to know more about some players? Kante is my favorite Chelsea player. He\'s one of the most hard playing players I have ever seen.'
+    'he always runs non-stop to take back possession from the opponent and he\'s very good at it too! What he is also good at is passing the ball and linking it with his fellow teammates'
+    'Overall, he\'s a wonderful teamplayer and a truly devoted player!`':'kante_rec'
 }
 
 rashford_rec={
     'state':'rashford_rec',
     '`In fact, if football was a video game, Marcus would be the cheat code that everyone wants to unlock. `':{
-        '#SET_INTERESTED #GET_Interested':{
+        '#SET_INTERESTED #GET_INTERESTED':{
             '#IF($INTERESTED=true)':{
                 '`Rashford appeared 233 times in this season and had 74 goals. He is absolutely one of the heated players. Do you want to look at some of his game stats?`:{'
                 '[yes]':{
@@ -187,12 +192,13 @@ rashford_rec={
         }
     }
 }
+
 kane_rec={
     'state':'kane_rec',
     '`Despite his success on the field, Harry Kane remains humble and grounded.`':{
-         '#GET_Interested':{
+         '#SET_INTERESTED #GET_INTERESTED':{
             '#IF($INTERESTED=true)':{
-                '`Harry Kane appeared 313 times in this season and had 206 goals. You can call him one of the most successful commissioned players. Do you want to know how he performed?`':{
+                '`Harry Kane appeared 313 times and had 206 goals. You can call him one of the most successful commissioned players. Do you want to know how he performed?`':{
                 '[yes]':{
                     '`stats Tottenham Hotspur is viral these days! Some of their players made wonderful performance at the World Cup.'
                     'I personally like this team a lot! Do you think you would like it?`':{
@@ -210,9 +216,55 @@ kane_rec={
     }
 }
 
+de_bruyne_rec = {
+    'state':'de_bruyne_rec',
+    '``':{
+             '#SET_INTERESTED #GET_INTERESTED':{
+                '#IF($INTERESTED=true)':{
+                    '`De Bruyne appeared almost 240 times in the premier league and had 101 assists! He created 160 big chances for his teamates. Truly, he is on top of his league. Do you want to know more about how he performed?`':{
+                    '[yes]':{
+                        '`stats Manchester City is truly one of the strongest team in all of Europe! However, even this team is impacted by whether De Bruyne is playing or not.'
+                        'In other words, he is the focal point of the playstyle of Manchester United that highlights possession which requires good passing!`':{
+                            '[yes]':{
+                                'cool':'end'
+                            },
+                            '[no]':'team_recommendation'
+                        }
+                    },
+                   '[no]':'player_recommendation'
+                    }
+            },
+                '#IF($INTERESTED=false)':'player_recommendation'
+             }
+        }
+}
+
+kante_rec = {
+    'state':'kante_rec',
+    '``':{
+            '#SET_INTERESTED #GET_INTERESTED':{
+                '#IF($INTERESTED=true)':{
+                    '`Kante appeared around 230 games in the premier league. He made a staggering 505 interceptions and 1685 recoveries, which means he did astonishingly well in recovering the ball! Do you want to know more about how he performed?`':{
+                    '[yes]':{
+                        '`stats Chelsea historically has a very strong performance! Although Kante is not the type of player that gets the spotlight, Chelsea holds differently whenever Kante is playing for them'
+                        'When he plays, there\'s always a stability to Chelsea that makes them look very hard to beat!`':{
+                            '[yes]':{
+                                'cool':'end'
+                            },
+                            '[no]':'team_recommendation'
+                        }
+                    },
+                   '[no]':'player_recommendation'
+                    }
+            },
+                '#IF($INTERESTED=false)':'player_recommendation'
+             }
+        }
+}
+
 team_recommendation={
     'state':'team_recommendation',
-    '`say teams`':'end'
+    '#GATE `Do you want to hear about the teams in Premier League then? `':'end'
 }
 
 macros = {
@@ -234,6 +286,7 @@ df.load_transitions(player_recommendation)
 df.load_transitions(rashford_rec)
 df.load_transitions(kane_rec)
 df.load_transitions(team_recommendation)
+df.load_transitions(de_bruyne_rec)
 df.add_macros(macros)
 
 if __name__ == '__main__':
