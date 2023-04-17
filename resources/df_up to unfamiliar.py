@@ -32,6 +32,20 @@ team_dict = {
     'wolverhampton': 'Wolverhampton Wanderers'
 }
 
+class V(Enum):
+    interested = 0
+
+class MacroGetInterested(Macro):
+    def run(self, ngrams: Ngrams, vars: Dict[str, Any], args: List[Any]):
+        interested = vars[V.interested.name][0]
+        print("interested value:")
+        print(interested)
+        if interested == 'true':
+            vars['INTERESTED'] = 'true'
+            print('true')
+        else:
+            vars['INTERESTED'] = 'false'
+            print('false')
 class MacroHome(Macro):
     def run(self, ngrams: Ngrams, vars: Dict[str, Any], args: List[Any]):
         user_input = input().lower()
@@ -102,29 +116,31 @@ unfamiliar={
                             '`Good for you! `$home_team_ranking`.`':'match_discussion'
                         },
                         'error':{
-                        '`Oh that\'s fine. I watched Manchester United\'s recent game with Sevilla, another team in EPL. It was so intense! They got 2-2 eventually.`':{}
+                        '`Oh that\'s fine. I watched Manchester United\'s recent game with Sevilla, another team in EPL. It was so intense! They got 2-2 eventually.`':{
                                 '#GET_INTERESTED':{
-                                    '$IF_Interested `I know! Sabitzer from Manchester United had the first goal 14 minutes after the game for his team! '
+                                    '#IF($INTERESTED=true) `I know! Sabitzer from Manchester United had the first goal 14 minutes after the game for his team! '
                                     'That is such a quick goal! Given that the average first goal for soccer game is after 30 minutes on average!`':{
                                         '#GET_INTERESTED':{
-                                            '$IF_Interested':{
-                                                 '`Manchester United’s squad is one of the biggest in the Premier League and it’s filled up with quality players in every position. They are actually gonna have a game with Tottenham Hotspur soon.
-                                                 'They have long been rivals with each other and Hotspur currently ranks one below Manchester United!
-                                                 'Do you bother bet on their results?`':{
+                                            '#IF($INTERESTED=true)':{
+                                                 '`Manchester United’s squad is one of the biggest in the Premier League and it’s filled up with quality players in every position. '
+                                                  'They are actually gonna have a game with Tottenham Hotspur soon.'
+                                                 'They have long been rivals with each other and Hotspur currently ranks one below Manchester United!'
+                                                 'Do you bother betting on their results?`':{
                                                      '/*':{
                                                          '#UNX, I would say 2-0. It somehow made me recall their game last year in October. They had 0-0 at half time.`':'end'
                                                      },
                                                  },
                                             },
-                                            '$IF_NotInterested':'fun_fact'
+                                            '#IF($INTERESTED=false)':'fun_fact'
                                         }
 
                                     }
+                                }
                                     },
-                                      '$IF_NotInterested':'fun_fact'
+                                      '#IF($INTERESTED=false)':'fun_fact'
                            }
                         },
-                    '$IF_NotInterested':'fun_fact'
+                    '#IF($INTERESTED=false)':'fun_fact'
                     }
                 }
             }
@@ -146,7 +162,7 @@ rashford_rec={
     'state':'rashford_rec',
     '`In fact, if football was a video game, Marcus would be the cheat code that everyone wants to unlock. `':{
         '#GET_Interested':{
-            '$IF_Interested':{
+            '#IF($INTERESTED=true)':{
                 '`Rashford appeared 233 times in this season and had 74 goals. He is absolutely one of the heated players. Do you want to look at some of his game stats?`:{'
                 '[yes]':{
                     '`stats Speaking of this, I am a big fan of Manchester United as well. Do you think you would like Manchester United? Manchester United is a team with a rich history and a tradition of excellence.'
@@ -159,7 +175,7 @@ rashford_rec={
                 },
                 '[no]':'player_recommendation'
             }
-            '$IF_NotInterested':'player_recommendation'
+            '#IF($INTERESTED=false)':'player_recommendation'
         }
     }
 }
@@ -167,7 +183,7 @@ kane_rec={
     'state':'kane_rec',
     '`Despite his success on the field, Harry Kane remains humble and grounded.`':{
          '#GET_Interested':{
-            '$IF_Interested':{
+            '#IF($INTERESTED=true)':{
                 '`Harry Kane appeared 313 times in this season and had 206 goals. You can call him one of the most successful commissioned players. Do you want to know how he performed?`':{
                 '[yes]':{
                     '`stats Tottenham Hotspur is viral these days! Some of their players made wonderful performance at the World Cup.'
@@ -181,7 +197,7 @@ kane_rec={
                '[no]':'player_recommendation'
                 }
         },
-            '$IF_NotInterested':'player_recommendation'
+            '#IF($INTERESTED=false)':'player_recommendation'
          }
     }
 }
@@ -192,7 +208,12 @@ team_recommendation={
 }
 
 macros = {
-        'GET_HOME_TEAM': MacroHome()
+        'GET_HOME_TEAM': MacroHome(),
+        'SET_INTERESTED': MacroGPTJSON(
+            'Do you think the user is interested in knowing more?',
+            {V.interested.name: ["true","false"]}
+        ),
+        'GET_INTERESTED': MacroGetInterested()
     }
 
 
